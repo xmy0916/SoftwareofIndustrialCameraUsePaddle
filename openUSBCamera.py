@@ -20,6 +20,7 @@ class OpenUSB(object):
         self.cameraoOneConfigUI.qDialog.show()
         self.cameraoOneConfigUI.qDialog.move(self.mainUI.MainWindow.pos().x() - self.cameraoOneConfigUI.qDialog.width(),\
                                                  self.mainUI.MainWindow.pos().y())
+        self.cameraoOneConfigUI.qDialog.setWindowTitle("USB相机")
     def defineConnect(self):
         self.cameraoOneConfigUI.pushButton_show_devices.clicked.connect(self.enum_devices)
         self.cameraoOneConfigUI.pushButton_open_device.clicked.connect(self.open_device)

@@ -31,11 +31,9 @@ class Ui_MainWindow(object):
         self.config = Config()
 
     def setupUi(self, MainWindow):
-        self.config = Config()
         MainWindow.setObjectName("MainWindow")
         MainWindow.setEnabled(True)
         MainWindow.resize(1076, 591)
-
         MainWindow.setAutoFillBackground(False)
         MainWindow.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
         MainWindow.setAnimated(True)
@@ -109,9 +107,12 @@ class Ui_MainWindow(object):
         self.pushButton_save_img = QtWidgets.QPushButton(self.centralWidget)
         self.pushButton_save_img.setGeometry(QtCore.QRect(840, 360, 231, 41))
         self.pushButton_save_img.setObjectName("pushButton_save_img")
+        self.pushButton_usb_camera = QtWidgets.QPushButton(self.centralWidget)
+        self.pushButton_usb_camera.setGeometry(QtCore.QRect(140, 90, 111, 31))
+        self.pushButton_usb_camera.setObjectName("pushButton_usb_camera")
         MainWindow.setCentralWidget(self.centralWidget)
         self.menuBar = QtWidgets.QMenuBar(MainWindow)
-        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1076, 26))
+        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1076, 23))
         self.menuBar.setObjectName("menuBar")
         MainWindow.setMenuBar(self.menuBar)
         self.mainToolBar = QtWidgets.QToolBar(MainWindow)
@@ -124,7 +125,6 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -132,9 +132,9 @@ class Ui_MainWindow(object):
         self.pushButton_one_camera.setText(_translate("MainWindow", "单相机"))
         self.pushButton_two_camera_service.setText(_translate("MainWindow", "多相机服务"))
         self.pushButton_two_camera.setText(_translate("MainWindow", "多相机"))
-        self.pushButton_camera_one.setText(_translate("MainWindow", "相机一"))
+        self.pushButton_camera_one.setText(_translate("MainWindow", "GIGE相机一"))
         self.pushButton_connect_camera.setText(_translate("MainWindow", "连接相机    ▾"))
-        self.pushButton_camera_two.setText(_translate("MainWindow", "相机二"))
+        self.pushButton_camera_two.setText(_translate("MainWindow", "GIGE2相机二"))
         self.pushButton_open_camera.setText(_translate("MainWindow", "打开相机"))
         self.pushButton_start_infer.setText(_translate("MainWindow", "开始预测"))
         self.pushButton_stop_infer.setText(_translate("MainWindow", "停止预测"))
@@ -144,6 +144,7 @@ class Ui_MainWindow(object):
         self.pushButton_confidence_adjust.setText(_translate("MainWindow", "置信度调节"))
         self.pushButton_set_pix.setText(_translate("MainWindow", "矩形框/像素设定"))
         self.pushButton_save_img.setText(_translate("MainWindow", "选择是否保存图片"))
+        self.pushButton_usb_camera.setText(_translate("MainWindow", "USB相机"))
 
 
     def hideCombox(self,flag = 0,mode = "None"):
@@ -160,6 +161,7 @@ class Ui_MainWindow(object):
         elif flag == 2:
             self.pushButton_camera_one.setVisible(False)
             self.pushButton_camera_two.setVisible(False)
+            self.pushButton_usb_camera.setVisible(False)
             self.pushButton_connect_camera.setText("连接相机    ▾")
         elif flag == 0:
             self.pushButton_two_camera_service.setVisible(False)
@@ -168,6 +170,7 @@ class Ui_MainWindow(object):
             self.pushButton_choose_mode.setText("模式选择    ▾")
             self.pushButton_camera_one.setVisible(False)
             self.pushButton_camera_two.setVisible(False)
+            self.pushButton_usb_camera.setVisible(False)
             self.pushButton_connect_camera.setText("连接相机    ▾")
 
 
@@ -189,9 +192,11 @@ class Ui_MainWindow(object):
             if text == "连接相机    ▴":
                 self.pushButton_camera_one.setVisible(False)
                 self.pushButton_camera_two.setVisible(False)
+                self.pushButton_usb_camera.setVisible(False)
             else:
                 self.pushButton_camera_one.setVisible(True)
                 self.pushButton_camera_two.setVisible(True)
+                self.pushButton_usb_camera.setVisible(True)
 
             text = "连接相机    ▴" if text == "连接相机    ▾" else "连接相机    ▾"
             self.pushButton_connect_camera.setText(text)
@@ -209,3 +214,4 @@ class Ui_MainWindow(object):
 
         self.pushButton_camera_one.clicked.connect(lambda: self.hideCombox(2,"camera_one"))
         self.pushButton_camera_two.clicked.connect(lambda: self.hideCombox(2,"camera_two"))
+        self.pushButton_usb_camera.clicked.connect(lambda: self.hideCombox(2, "camera_usb"))

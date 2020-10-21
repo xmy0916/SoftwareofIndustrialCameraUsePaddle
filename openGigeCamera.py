@@ -25,9 +25,11 @@ class OpenGige(object):
         if self.flag == 1:
             self.cameraoOneConfigUI.qDialog.move(self.mainUI.MainWindow.pos().x() - self.cameraoOneConfigUI.qDialog.width(),\
                                                  self.mainUI.MainWindow.pos().y())
+            self.cameraoOneConfigUI.qDialog.setWindowTitle("GIGE相机一")
         elif self.flag == 2:
             self.cameraoOneConfigUI.qDialog.move(self.mainUI.MainWindow.pos().x() + self.mainUI.MainWindow.width(),\
                                                  self.mainUI.MainWindow.pos().y())
+            self.cameraoOneConfigUI.qDialog.setWindowTitle("GIGE相机二")
 
     def defineConnect(self):
         self.cameraoOneConfigUI.pushButton_show_devices.clicked.connect(self.enum_devices)

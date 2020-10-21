@@ -11,6 +11,7 @@ class MainCode(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
         self.cameraoOneConfigUI = None
+        self.cameraoOneConfigUI1 = None
         self.cameraoOneConfigUI2 = None
         self.mainUI = Ui_MainWindow()
         self.mainUI.MainWindow.show()
@@ -20,6 +21,7 @@ class MainCode(QMainWindow):
     def defineConnect(self):
         self.mainUI.pushButton_camera_one.clicked.connect(lambda: self.openCameraOneConfigUI(1,self.mainUI))
         self.mainUI.pushButton_camera_two.clicked.connect(lambda: self.openCameraOneConfigUI(2,self.mainUI))
+        self.mainUI.pushButton_usb_camera.clicked.connect(lambda: self.openCameraOneConfigUI(3, self.mainUI))
 
     def openCameraOneConfigUI(self,flag,mainUI):
         if flag == 1:
@@ -29,6 +31,12 @@ class MainCode(QMainWindow):
             else:
                 self.cameraoOneConfigUI.show()
         elif flag == 2:
+            if self.cameraoOneConfigUI1 is None:
+                self.cameraoOneConfigUI1 = OpenGige(mainUI,2)
+                self.cameraoOneConfigUI1.show()
+            else:
+                self.cameraoOneConfigUI1.show()
+        elif flag == 3:
             if self.cameraoOneConfigUI2 is None:
                 self.cameraoOneConfigUI2 = OpenUSB(mainUI)
                 self.cameraoOneConfigUI2.show()
