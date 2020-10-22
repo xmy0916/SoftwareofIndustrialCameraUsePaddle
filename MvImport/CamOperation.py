@@ -163,7 +163,10 @@ class CameraOperation():
             print ("stop grabbing successfully!")
             self.b_start_grabbing = False
             self.b_exit  = True
-            self.mainUI.label_img_one.clear()
+            if self.falg == 1:
+                self.mainUI.label_img_one.clear()
+            elif self.flag == 2:
+                self.mainUI.label_img_two.clear()
 
     def Close_device(self):
         if True == self.b_open_device:
@@ -181,7 +184,10 @@ class CameraOperation():
         self.b_open_device = False
         self.b_start_grabbing = False
         self.b_exit  = True
-        self.mainUI.label_img_one.clear()
+        if self.flag == 1:
+            self.mainUI.label_img_one.clear()
+        elif self.flag == 2:
+            self.mainUI.label_img_two.clear()
         print ("close device successfully!")
 
     def Set_trigger_mode(self,strMode):
@@ -329,7 +335,10 @@ class CameraOperation():
             # cv2.imshow(str(self.n_win_gui_id),numArray)
 
             CameraImgs.setImg(self.flag,numArray)
-            self.showImg(numArray,self.mainUI.label_img_one)
+            if self.flag == 1:
+                self.showImg(numArray,self.mainUI.label_img_one)
+            elif self.flag == 2:
+                self.showImg(numArray, self.mainUI.label_img_two)
             cv2.waitKey(1)
 
             if self.b_exit == True:

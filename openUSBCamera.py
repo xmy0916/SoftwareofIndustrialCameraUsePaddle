@@ -74,7 +74,7 @@ class OpenUSB(object):
                 image = converter.Convert(grabResult)
                 img = image.GetArray()
                 CameraImgs.setImg(3,img) # 图像数据存在cameraImg类中
-                self.showImg(img,self.mainUI.label_img_one) # 显示在主界面上
+                self.showImg(img,self.mainUI.label_img_two) # 显示在主界面上
                 k = cv2.waitKey(60)
                 if k == 27:
                     break
