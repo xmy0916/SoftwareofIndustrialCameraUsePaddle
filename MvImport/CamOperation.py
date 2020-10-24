@@ -163,7 +163,7 @@ class CameraOperation():
             print ("stop grabbing successfully!")
             self.b_start_grabbing = False
             self.b_exit  = True
-            if self.falg == 1:
+            if self.flag == 1:
                 self.mainUI.label_img_one.clear()
             elif self.flag == 2:
                 self.mainUI.label_img_two.clear()

@@ -134,7 +134,7 @@ class Ui_MainWindow(object):
         self.pushButton_two_camera.setText(_translate("MainWindow", "多相机"))
         self.pushButton_camera_one.setText(_translate("MainWindow", "GIGE相机一"))
         self.pushButton_connect_camera.setText(_translate("MainWindow", "连接相机    ▾"))
-        self.pushButton_camera_two.setText(_translate("MainWindow", "GIGE2相机二"))
+        self.pushButton_camera_two.setText(_translate("MainWindow", "GIGE相机二"))
         self.pushButton_open_camera.setText(_translate("MainWindow", "打开相机"))
         self.pushButton_start_infer.setText(_translate("MainWindow", "开始预测"))
         self.pushButton_stop_infer.setText(_translate("MainWindow", "停止预测"))
