@@ -1,5 +1,6 @@
 from UI.configCamera import Ui_Dialog
 import sys
+import os
 sys.path.append("./MvImport")
 
 from MvCameraControl_class import *
@@ -34,6 +35,7 @@ class OpenGige(object):
     def defineConnect(self):
         self.cameraoOneConfigUI.pushButton_show_devices.clicked.connect(self.enum_devices)
         self.cameraoOneConfigUI.pushButton_open_device.clicked.connect(self.open_device)
+        self.cameraoOneConfigUI.pushButton_set_IP.clicked.connect(self.set_IP)
 
         self.cameraoOneConfigUI.pushButton_close_device.clicked.connect(self.close_device)
         self.cameraoOneConfigUI.pushButton_start_grap.clicked.connect(self.start_grabbing)
@@ -154,3 +156,9 @@ class OpenGige(object):
         self.obj_cam_operation.frame_rate = self.cameraoOneConfigUI.lineEdit_frame_rate.text().rstrip("\n")
         self.obj_cam_operation.Set_parameter(self.obj_cam_operation.frame_rate,self.obj_cam_operation.exposure_time,
                                              self.obj_cam_operation.gain)
+
+    def set_IP(self):
+        root = os.getcwd()
+        exePath = os.path.join(root,"software\\NIC_Configurator.exe")
+        # print(exePath)
+        os.startfile(exePath)
