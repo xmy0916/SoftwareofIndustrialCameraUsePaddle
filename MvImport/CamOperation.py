@@ -18,7 +18,6 @@ from tkinter import ttk
 from PyQt5 import QtGui
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-from PyQt5.QtCore import pyqtSignal
 
 # sys.path.append("../MvImport")
 from MvCameraControl_class import *
@@ -66,7 +65,6 @@ class CameraOperation():
         self.frame_rate = frame_rate
         self.exposure_time = exposure_time
         self.gain = gain
-        self.signalImg = pyqtSignal(object)
 
     def To_hex_str(self,num):
         chaDic = {10: 'a', 11: 'b', 12: 'c', 13: 'd', 14: 'e', 15: 'f'}
@@ -94,7 +92,7 @@ class CameraOperation():
 
             ret = self.obj_cam.MV_CC_OpenDevice(MV_ACCESS_Exclusive, 0)
             if ret != 0:
-                QMessageBox.about(self.configUI.qDialog, '提示', 'open device fail! ret = '+ self.To_hex_str(ret))
+                QMessageBox.about(self.configUI.qDialog, '提示', 'open device fail! ret = '+ self.To_hex_str(ret) + "请检查摄像头IP是否可达，不可达请点击Set IP配置IPV4网段使摄像头可达！")
                 return ret
             QMessageBox.about(self.configUI.qDialog, '提示', "open device successfully!")
             self.b_open_device = True
