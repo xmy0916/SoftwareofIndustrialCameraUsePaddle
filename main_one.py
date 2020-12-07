@@ -2,10 +2,10 @@ import sys
 import os
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog,QMessageBox
 from PyQt5.QtCore import *
-from UI.mainwindow_two import Ui_MainWindow
+from UI.mainwindow_one import Ui_MainWindow
 import cv2
 from PyQt5 import QtGui
-from PyQt5.QtCore import *
+from PyQt5 import QtCore
 from openGigeCamera import OpenGige
 from openUSBCamera import OpenUSB
 from MvImport.MvCameraControl_class import *
@@ -24,7 +24,7 @@ sys.path.append(os.path.join(root, "software"))
 sys.path.append(os.path.join(root, "UI"))
 sys.path.append(os.path.join(root,"data"))
 
-class MainCode(QMainWindow):
+class MainCodeOne(QMainWindow):
     deviceSignal = pyqtSignal(int)
     def __init__(self):
         QMainWindow.__init__(self)
@@ -38,8 +38,7 @@ class MainCode(QMainWindow):
         self.thread_camera=None
         self.infer_flag=0
         self.servermode=0
-        self.cameranum = 2
-        self.cam = MvCamera()
+        self.cameranum = 1
         self.deviceList = MV_CC_DEVICE_INFO_LIST()
         self.tlayerType = MV_GIGE_DEVICE | MV_USB_DEVICE
 
@@ -59,15 +58,14 @@ class MainCode(QMainWindow):
         if flag == 1:
             self.cameraIndex |= 1 # 最低位置一
             if self.cameraoOneConfigUI is None:
-                
-                self.cameraoOneConfigUI = OpenGige(self.mainUI,flag,self.cameraIndex,self.servermode,self.deviceList,self.cameranum)
+                self.cameraoOneConfigUI = OpenGige(self.mainUI,flag,self.cameraIndex,self.servermode, self.deviceList,self.cameranum)
                 self.cameraoOneConfigUI.show()
             else:
                 self.cameraoOneConfigUI.show()
         elif flag == 2:
             self.cameraIndex |= 2 # 第二位置一
             if self.cameraoOneConfigUI1 is None:
-                self.cameraoOneConfigUI1 = OpenGige(self.mainUI,flag,self.cameraIndex,self.servermode,self.deviceList,self.cameranum)
+                self.cameraoOneConfigUI1 = OpenGige(self.mainUI,flag,self.cameraIndex,self.servermode, self.deviceList,self.cameranum)
                 self.cameraoOneConfigUI1.show()
             else:
                 self.cameraoOneConfigUI1.show()
@@ -79,37 +77,7 @@ class MainCode(QMainWindow):
             else:
                 self.cameraoOneConfigUI2.show()
 
-    def showImgThread(self):
-        while True:
-            if self.cameraIndex & 4 != 0: # usb图
-                if(self.infer_flag== 0):
-                    usbImg = CameraImgs.getImg(3)   #获取正常图片
-                else:
-                    usbImg = CameraImgs.getInferImg(3)  #获取识别后图片
-                if usbImg is not None:
-                    self.showImg(usbImg,self.mainUI.label_img_two)
-                    cv2.waitKey(10)  # 不加延时会卡死         
-
-            if self.cameraIndex & 2 != 0: #gige2图
-                if(self.infer_flag== 0):
-                    gige2Img = CameraImgs.getImg(2)
-                else:
-                    gige2Img = CameraImgs.getInferImg(2)
-                if gige2Img is not None:
-                    self.showImg(gige2Img, self.mainUI.label_img_two)
-                    cv2.waitKey(12) # 不加延时会卡死
-
-            if self.cameraIndex & 1 != 0: #gige1图
-                if(self.infer_flag== 0):
-                    gige1Img = CameraImgs.getImg(1)
-                else:
-                    gige1Img = CameraImgs.getInferImg(1)
-                if gige1Img is not None:
-                    self.showImg(gige1Img, self.mainUI.label_img_one)
-                    cv2.waitKey(10) # 不加延时会卡死
-
     # ch:枚举相机 | en:enum devices
-    
     def enum_devices(self):
         self.mainUI.comboBox_enum_devices.clear()
         deviceList = MV_CC_DEVICE_INFO_LIST()
@@ -171,10 +139,9 @@ class MainCode(QMainWindow):
 
     def checkServerMode(self,state):
         if state == QtCore.Qt.Unchecked:
-            self.servermode = 1
-        elif state == QtCore.Qt.Checked:
             self.servermode = 0
-
+        elif state == QtCore.Qt.Checked:
+            self.servermode = 1
 
     def devicechange(self):
         self.deviceSignal.emit(self.mainUI.comboBox_enum_devices.currentIndex())
@@ -218,9 +185,12 @@ class MainCode(QMainWindow):
             if u'\u4e00' <= ch <= u'\u9fff':
                 return True
         return False
+
+    def show(self):
+       self.mainUI.MainWindow.show()
             
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    md = MainCode()
+    md = MainCodeOne()
     sys.exit(app.exec_())

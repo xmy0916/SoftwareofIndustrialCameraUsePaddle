@@ -5,6 +5,9 @@ import cv2
 from PyQt5 import QtGui
 from PyQt5.QtCore import *
 from cameraImgs import CameraImgs
+import os
+from PyQt5 import QtWidgets,QtCore, QtGui
+import threading
 
 class OpenUSB(object):
     def __init__(self,mainUI):
@@ -29,6 +32,7 @@ class OpenUSB(object):
         self.cameraoOneConfigUI.pushButton_stop_grap.clicked.connect(self.stop_grapping)
         self.cameraoOneConfigUI.pushButton_get_parameter.clicked.connect(self.getParameter)
         self.cameraoOneConfigUI.pushButton_set_parameter.clicked.connect(self.setParameter)
+        self.cameraoOneConfigUI.pushButton_load_model.clicked.connect(self.open_model_dir)
 
     # ch:枚举相机 | en:enum devices
     def enum_devices(self):
@@ -37,6 +41,7 @@ class OpenUSB(object):
             self.cameraoOneConfigUI.comboBox_enum_devices.addItem(self.USBCameraList[i].GetFriendlyName())
         self.cameraoOneConfigUI.lineEdit_num_of_deices.setText("{}cameras".format(len(self.USBCameraList)))
 
+        
         #ch:打开相机 | en:open device
     def open_device(self):
         if True == self.b_is_run:
@@ -54,34 +59,38 @@ class OpenUSB(object):
             QMessageBox.about(self.cameraoOneConfigUI.qDialog, '提示', '打开失败')
         QMessageBox.about(self.cameraoOneConfigUI.qDialog, '提示', '打开成功')
 
+    def openvideo(self):
+        capture = cv2.VideoCapture("./data/video_14.mp4")
+        while(True):
+            ret,img = capture.read()
+            CameraImgs.setImg(3,img) # 图像数据存在cameraImg类中   
+            cv2.waitKey(30)
     def start_grabbing(self):
         # 开始读取图像
-        if self.camera == None or self.b_is_run == False:
-            QMessageBox.about(self.cameraoOneConfigUI.qDialog, '提示', '相机未打开')
-            return
-        self.camera.StartGrabbing(pylon.GrabStrategy_LatestImageOnly)
-        converter = pylon.ImageFormatConverter()
+        # if self.camera == None or self.b_is_run == False:
+        #     QMessageBox.about(self.cameraoOneConfigUI.qDialog, '提示', '相机未打开')
+        #     return
+        # self.camera.StartGrabbing(pylon.GrabStrategy_LatestImageOnly)
+        # converter = pylon.ImageFormatConverter()
 
-        # 转换为OpenCV的BGR彩色格式
-        converter.OutputPixelFormat = pylon.PixelType_BGR8packed
-        converter.OutputBitAlignment = pylon.OutputBitAlignment_MsbAligned
+        # # 转换为OpenCV的BGR彩色格式
+        # converter.OutputPixelFormat = pylon.PixelType_BGR8packed
+        # converter.OutputBitAlignment = pylon.OutputBitAlignment_MsbAligned
 
-        while self.camera.IsGrabbing() and self.b_is_run == True:
-            grabResult = self.camera.RetrieveResult(5000, pylon.TimeoutHandling_ThrowException)
+        # while self.camera.IsGrabbing() and self.b_is_run == True:
+        #     grabResult = self.camera.RetrieveResult(5000, pylon.TimeoutHandling_ThrowException)
 
-            if grabResult.GrabSucceeded():
-                # 转换为OpenCV图像格式
-                image = converter.Convert(grabResult)
-                img = image.GetArray()
-                CameraImgs.setImg(3,img) # 图像数据存在cameraImg类中
-                self.showImg(img,self.mainUI.label_img_two) # 显示在主界面上
-                k = cv2.waitKey(60)
-                if k == 27:
-                    break
-            grabResult.Release()
+        #     if grabResult.GrabSucceeded():
+        #         # 转换为OpenCV图像格式
+        #         image = converter.Convert(grabResult)
+        #         img = image.GetArray()
+        #         CameraImgs.setImg(3,img) # 图像数据存在cameraImg类中
+        #     grabResult.Release()
 
-        # 关闭相机
-        self.camera.StopGrabbing()
+        # # 关闭相机
+        # self.camera.StopGrabbing()
+        t  = threading.Thread(target=self.openvideo)
+        t.start()
 
     # ch:停止抓取 | stop grapping
     def stop_grapping(self):
@@ -142,3 +151,54 @@ class OpenUSB(object):
         else:
             img_new = cv2.resize(image, (int(width * height_new / height), height_new))
         return img_new
+        
+    def is_chinese(self,string):
+        """
+        检查整个字符串是否包含中文
+        :param string: 需要检查的字符串
+        :return: bool
+        """
+        for ch in string:
+            if u'\u4e00' <= ch <= u'\u9fff':
+                return True
+
+        return False
+
+
+    #添加模型
+    def open_model_dir(self):
+        DefaultImDir=os.getcwd()
+        Model_Dir = QtWidgets.QFileDialog.getExistingDirectory(None,"Paddle -- Open_Model_Dir", DefaultImDir)
+        if Model_Dir != '':
+            if self.is_chinese(Model_Dir):
+                print("有中文")
+                warning_box=QtWidgets.QMessageBox(QtWidgets.QMessageBox.Warning, '警告', '暂不支持含有中文的路径!')
+                warning_box.exec_()
+            else:
+                f = open(r'./data/USBCamera_model_dir_paths.txt', 'w', encoding='utf-8')
+                f.flush()
+                f.write(Model_Dir)
+                f.close
+                #print(self.List)
+
+
+    # 加载置信度|矩形框|像素设定
+    def load_confidence_set_pix(self):
+        DefaultImDir=os.getcwd()
+        TxtDir = QtWidgets.QFileDialog.getExistingDirectory(None,"Paddle -- Get_Confidence_Set_Pix", DefaultImDir)
+        if TxtDir != '':
+            path = glob.glob(os.path.join(TxtDir, '*.json'))
+            windows_path = path[0].replace('\\','/')
+            print(windows_path)
+            with open(windows_path,'r',encoding='utf8')as fp:
+                confidence_set_pix = json.load(fp)
+            class_num = len(confidence_set_pix["confidence_set_pix"])
+
+        for i in range(class_num):
+            if float(confidence_set_pix["confidence_set_pix"][i]["confidence"]) >= 1 or float(confidence_set_pix["confidence_set_pix"][i]["confidence"]) <= 0:
+                #warning = 
+                warning_box=QtWidgets.QMessageBox(QtWidgets.QMessageBox.Warning, '警告', '请确认 id=%d的类别 置信度为在[0,1]区间内的任意浮点数!'%i)
+                warning_box.exec_()
+        
+        else:
+            return confidence_set_pix["confidence_set_pix"]

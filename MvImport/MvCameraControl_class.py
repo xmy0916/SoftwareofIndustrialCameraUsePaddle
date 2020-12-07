@@ -1,17 +1,20 @@
 # -- coding: utf-8 --
 
 import sys
-sys.path.append("../MvImport")
+import os
 import copy
 import ctypes
 
 from ctypes import *
-
+root = os.getcwd()
+sys.path.append(root + "\\MvImport")
+print(root + "\\MvImport")
 from PixelType_header import *
 from CameraParams_const import *
 from CameraParams_header import *
 from MvErrorDefine_const import *
 
+root = os.getcwd()
 MvCamCtrldll = WinDLL("MvCameraControl.dll")
 
 # 用于回调函数传入相机实例

@@ -2,24 +2,17 @@
 import sys
 import threading
 import msvcrt
-import _tkinter
 from PyQt5.QtWidgets import QMessageBox
-import tkinter as tk
 import numpy as np
 import cv2
-import time
-import sys, os
-import datetime
 import inspect
 import ctypes
 import random
 from ctypes import *
-from tkinter import ttk
 from PyQt5 import QtGui
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
-# sys.path.append("../MvImport")
 from MvCameraControl_class import *
 from cameraImgs import CameraImgs
 
@@ -333,11 +326,11 @@ class CameraOperation():
             # cv2.imshow(str(self.n_win_gui_id),numArray)
 
             CameraImgs.setImg(self.flag,numArray)
-            if self.flag == 1:
-                self.showImg(numArray,self.mainUI.label_img_one)
-            elif self.flag == 2:
-                self.showImg(numArray, self.mainUI.label_img_two)
-            cv2.waitKey(1)
+            # if self.flag == 1:
+            #     self.showImg(numArray,self.mainUI.label_img_one)
+            # elif self.flag == 2:
+            #     self.showImg(numArray, self.mainUI.label_img_two)
+            # cv2.waitKey(1)
 
             if self.b_exit == True:
                 cv2.destroyAllWindows()
