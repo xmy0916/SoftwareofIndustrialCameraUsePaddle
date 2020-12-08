@@ -4,7 +4,7 @@
 ## 文件结构
 
 ```
-softwareOfPaddlePaddle
+SoftwareofIndustrialCameraUsePaddle
 	data:    (超参数配置：类别、置信度、像素 设定)
 		gigetype1.json
 		gigetype2,json
