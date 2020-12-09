@@ -31,6 +31,11 @@ SoftwareofIndustrialCameraUsePaddle
 ## 运行方法
 - 本项目支持单相机、多相机两种模式可供选择。
 
+```bash
+# 安装依赖
+pip install -r requirements.txt -i https://mirror.baidu.com/pypi/simple
+```
+
 ```python
 # 启动主程序
 python start.py
