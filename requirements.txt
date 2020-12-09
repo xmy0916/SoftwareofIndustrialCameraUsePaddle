@@ -1,0 +1,6 @@
+pyqt5
+paddlex
+opencv-python
+pypylon
+paddlepaddle==1.8.4
+grpcio
