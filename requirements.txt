@@ -4,3 +4,5 @@ opencv-python
 pypylon
 paddlepaddle==1.8.4
 grpcio
+pypiwin32
+pyperclip

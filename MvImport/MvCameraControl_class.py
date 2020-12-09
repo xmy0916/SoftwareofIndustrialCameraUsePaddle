@@ -7,16 +7,21 @@ import ctypes
 
 from ctypes import *
 root = os.getcwd()
-sys.path.append(root + "/MvImport/Win32_i86/")
-sys.path.append(root + "/MvImport/win64_x64/")
 sys.path.append(root + "/MvImport/")
 from PixelType_header import *
 from CameraParams_const import *
 from CameraParams_header import *
 from MvErrorDefine_const import *
-
-root = os.getcwd()
-MvCamCtrldll = WinDLL("MvCameraControl.dll")
+try:
+    MvCamCtrldll = WinDLL("MvCameraControl.dll")
+except:
+    import win32api, win32con
+    import pyperclip
+    path1 = root + "/MvImport/Win64_x64/;"
+    path2 = root + "/MvImport/Win32_i86/;"
+    pyperclip.copy(path1 + path2)
+    message = "相机DLL载入失败，请检查以下两个变量是否写入系统环境Path变量中，若已经存在建议重启电脑，不存在请添加(已复制到剪切板！！！)：\n" + path1 + "\n" + path2
+    win32api.MessageBox(0, message, "警告", win32con.MB_OK)
 
 # 用于回调函数传入相机实例
 class _MV_PY_OBJECT_(Structure):
